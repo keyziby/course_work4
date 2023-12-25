@@ -1,37 +1,28 @@
-import json
+from course_work4.config import OPERATIONS_PATH
+from utils import number_format, date_format, get_data, get_sorted_list, get_filtered_data
 
-def get_data(path):
-    with open(path, encoding='utf-8') as f:
-        data_dict = json.load(f)
-        return data_dict
-
-def get_filtered_data(data_dict):
-    date_list = []
-    for data in data_dict:
-        if "from" not in data:
-            continue
-        elif data["state"] == "EXECUTED":
-            date_list.append(data["date"][0:10])
-    return date_list
-
-def get_sorted_list(date_list):
-    sorted_list = sorted(date_list, reverse=True)[0:5]
-    return sorted_list
+data_dict = get_data(OPERATIONS_PATH)
+date_list = get_filtered_data(data_dict)
+sorted_list = get_sorted_list(date_list)
 
 
-def number_format(name):
-    if "счет" in name.lower():
-        name_list = name.split()
-        format_number = name_list[0] + " " + "**" + name_list[-1][-4:]
-        return format_number
-    else:
-        name_list = name.split()
-        name_operation = name_list[0:-1]
-        format_number = " ".join(name_operation) + " " + name_list[-1][0:4] + " " + name_list[-1][
-                                                                                    4:6] + "**" + " " + "****" + " " + \
-                        name_list[-1][-4:]
-        return format_number
+def make_list_operations():
+    for i in range(5):
+        for data in data_dict:
+            if "from" not in data:
+                continue
+            elif data["date"][0:10] == sorted_list[i]:
+                date_name = data["date"][0:10]
+                description_name = data["description"]
+                from_name = data["from"]
+                to_name = data["to"]
+                amount = data["operationAmount"]["amount"]
+                currency = data["operationAmount"]["currency"]["name"]
 
-def date_format(date):
-    format_date = ".".join(date.split("-")[::-1])
-    return format_date
+                print(f"{date_format(date_name)} {description_name}\n"
+                      f"{number_format(from_name)} -> {number_format(to_name)}\n"
+                      f"{amount} {currency}\n"
+                      f"")
+
+
+make_list_operations()
