@@ -16,3 +16,16 @@ def get_filtered_data(data_dict):
 def get_sorted_list(date_list):
     sorted_list = sorted(date_list, reverse=True)[0:5]
     return sorted_list
+
+def number_format(name):
+    if "счет" in name.lower():
+        name_list = name.split()
+        format_number = name_list[0] + " " + "**" + name_list[-1][-4:]
+        return format_number
+    else:
+        name_list = name.split()
+        name_operation = name_list[0:-1]
+        format_number = " ".join(name_operation) + " " + name_list[-1][0:4] + " " + name_list[-1][
+                                                                                    4:6] + "**" + " " + "****" + " " + \
+                        name_list[-1][-4:]
+        return format_number
